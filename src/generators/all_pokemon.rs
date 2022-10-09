@@ -4,18 +4,18 @@ use anyhow::Result;
 use handlebars::Handlebars;
 use serde_json::json;
 
+use super::render_to_write;
+
 pub(super) async fn generate_pokemon_list(
     path: PathBuf,
     hb: &Handlebars<'_>,
     pokemon_names: Vec<String>,
 ) -> Result<()> {
-    let mut all_pokemon_page = std::fs::File::create(path)?;
-
-    hb.render_to_write(
-        "base",
+    render_to_write(
+        hb,
+        "all_pokemon",
         &json!({ "pokemon_names": pokemon_names }),
-        &mut all_pokemon_page,
-    )?;
-
-    Ok(())
+        &path,
+    )
+    .await
 }

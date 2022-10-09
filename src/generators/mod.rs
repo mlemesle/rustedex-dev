@@ -1,6 +1,7 @@
 use anyhow::Result;
-use handlebars::Handlebars;
+use handlebars::{Handlebars, JsonValue};
 use rustemon::client::RustemonClient;
+use serde_json::json;
 
 use std::path::PathBuf;
 
@@ -41,4 +42,24 @@ async fn generate_pokemon_list(rc: &RustemonClient) -> Result<Vec<String>> {
     }
 
     Ok(pokemon_names)
+}
+
+pub(self) async fn render_to_write(
+    hb: &Handlebars<'_>,
+    inner_template: &str,
+    data: &JsonValue,
+    file_path: &PathBuf,
+) -> Result<()> {
+    let mut file = std::fs::File::create(file_path)?;
+
+    hb.render_to_write(
+        "base",
+        &json!({
+        "inner_template": inner_template,
+        "data": data
+         }),
+        &mut file,
+    )?;
+
+    Ok(())
 }
