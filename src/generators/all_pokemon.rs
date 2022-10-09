@@ -2,20 +2,21 @@ use std::path::PathBuf;
 
 use anyhow::Result;
 use handlebars::Handlebars;
-use serde_json::json;
+use serde::Serialize;
 
 use super::render_to_write;
 
-pub(super) async fn generate_pokemon_list(
+#[derive(Serialize)]
+struct AllPokemonContext {
+    pokemon_names: Vec<String>,
+}
+
+pub(super) async fn generate_all_pokemon_page(
     path: PathBuf,
     hb: &Handlebars<'_>,
     pokemon_names: Vec<String>,
 ) -> Result<()> {
-    render_to_write(
-        hb,
-        "all_pokemon",
-        &json!({ "pokemon_names": pokemon_names }),
-        &path,
-    )
-    .await
+    let all_pokemon_context = &AllPokemonContext { pokemon_names };
+
+    render_to_write(hb, "all_pokemon", all_pokemon_context, &path).await
 }

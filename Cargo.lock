@@ -1425,7 +1425,7 @@ dependencies = [
  "clap",
  "handlebars",
  "rustemon",
- "serde_json",
+ "serde",
  "tokio",
  "warp",
 ]

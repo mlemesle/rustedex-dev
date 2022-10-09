@@ -1,7 +1,7 @@
 use anyhow::Result;
-use handlebars::{Handlebars, JsonValue};
+use handlebars::Handlebars;
 use rustemon::client::RustemonClient;
-use serde_json::json;
+use serde::Serialize;
 
 use std::path::PathBuf;
 
@@ -17,7 +17,7 @@ pub async fn generate(
 
     base_path.push("all_pokemon.html");
 
-    all_pokemon::generate_pokemon_list(base_path, hb, pokemon_names).await?;
+    all_pokemon::generate_all_pokemon_page(base_path, hb, pokemon_names).await?;
 
     Ok(())
 }
@@ -44,22 +44,28 @@ async fn generate_pokemon_list(rc: &RustemonClient) -> Result<Vec<String>> {
     Ok(pokemon_names)
 }
 
-pub(self) async fn render_to_write(
+#[derive(Serialize)]
+struct BaseContext<'a, T: Serialize> {
+    inner_template: &'a str,
+    data: T,
+}
+
+pub(self) async fn render_to_write<T>(
     hb: &Handlebars<'_>,
     inner_template: &str,
-    data: &JsonValue,
+    data: &T,
     file_path: &PathBuf,
-) -> Result<()> {
+) -> Result<()>
+where
+    T: Serialize,
+{
     let mut file = std::fs::File::create(file_path)?;
+    let context = &BaseContext {
+        inner_template,
+        data,
+    };
 
-    hb.render_to_write(
-        "base",
-        &json!({
-        "inner_template": inner_template,
-        "data": data
-         }),
-        &mut file,
-    )?;
+    hb.render_to_write("base", context, &mut file)?;
 
     Ok(())
 }

@@ -13,6 +13,6 @@ anyhow = "1.0.65"
 clap = { version = "4.0.10", features = ["derive"] }
 handlebars = { version = "4.3.5", features = ["dir_source"] }
 rustemon = "2.1.0"
-serde_json = "1.0.85"
+serde = { version = "1.0.145", features = ["derive"] }
 tokio = { version = "1.21.2", features = ["fs", "macros", "rt-multi-thread"] }
 warp = "0.3.3"
