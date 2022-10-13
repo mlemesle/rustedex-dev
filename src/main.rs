@@ -11,6 +11,7 @@ use rustemon::client::RustemonClient;
 use warp::Filter;
 
 mod args;
+mod builders;
 mod generators;
 mod handlebars;
 mod utils;
