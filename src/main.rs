@@ -13,6 +13,7 @@ use warp::Filter;
 mod args;
 mod generators;
 mod handlebars;
+mod utils;
 
 const ASSETS: include_dir::Dir = include_dir::include_dir!("./assets");
 

@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use handlebars::Handlebars;
 use rustemon::{
     client::RustemonClient,
@@ -9,6 +9,7 @@ use rustemon::{
 use serde::Serialize;
 
 use super::render_to_write;
+use crate::utils::{self, FindWordingByLang};
 
 #[derive(Serialize)]
 struct PokemonContext {
@@ -17,6 +18,7 @@ struct PokemonContext {
     name_en: String,
     name_jp: String,
     types: Vec<String>,
+    genus: String,
 }
 
 pub(super) async fn generate_pokemon_page(
@@ -33,20 +35,20 @@ pub(super) async fn generate_pokemon_page(
 
     let artwork_url = pokemon
         .sprites
-        .unwrap()
+        .with_context(|| format!("No sprites for {:?}", pokemon.name))?
         .other
-        .unwrap()
+        .with_context(|| format!("No 'other' sprite for {:?}", pokemon.name))?
         .official_artwork
-        .unwrap()
+        .with_context(|| format!("No official artwork for {:?}", pokemon.name))?
         .front_default
-        .unwrap();
+        .with_context(|| format!("No 'front_default' sprite for {:?}", pokemon.name))?;
 
     let mut name_fr = "".to_string();
     let mut name_en = "".to_string();
     let mut name_ja = "".to_string();
     let mut name_roomaji = "".to_string();
 
-    for name in pokemon_specie.names.unwrap() {
+    for name in pokemon_specie.names.unwrap_or_default() {
         if let Name {
             name: Some(n),
             language: Some(NamedApiResource { name: Some(l), .. }),
@@ -69,12 +71,19 @@ pub(super) async fn generate_pokemon_page(
         .map(|pokemon_type| pokemon_type.type_.unwrap().name.unwrap())
         .collect();
 
+    let genus = pokemon_specie
+        .genera
+        .unwrap_or_default()
+        .find_by_lang(utils::EN)
+        .with_context(|| format!("No genus found for {:?}", pokemon_specie.name))?;
+
     let pokemon_context = &PokemonContext {
         artwork_url,
         name_fr,
         name_en,
         name_jp: format!("{} {}", name_ja, name_roomaji),
         types,
+        genus,
     };
 
     render_to_write(hb, "pokemon", pokemon_context, &path).await
