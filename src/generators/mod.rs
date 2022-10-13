@@ -6,18 +6,20 @@ use serde::Serialize;
 use std::path::PathBuf;
 
 mod all_pokemon;
+mod pokemon;
 
-pub async fn generate(
-    mut base_path: PathBuf,
-    hb: &Handlebars<'_>,
-    rc: &RustemonClient,
-) -> Result<()> {
+pub async fn generate(base_path: PathBuf, hb: &Handlebars<'_>, rc: &RustemonClient) -> Result<()> {
     let pokemon_names = generate_pokemon_list(rc).await?;
     println!("{} Pokemons found, generating pages", pokemon_names.len());
 
-    base_path.push("all_pokemon.html");
+    let mut all_pokemon_path = base_path.clone();
+    all_pokemon_path.push("all_pokemon.html");
 
-    all_pokemon::generate_all_pokemon_page(base_path, hb, pokemon_names).await?;
+    all_pokemon::generate_all_pokemon_page(all_pokemon_path, hb, &pokemon_names).await?;
+
+    for pokemon_name in pokemon_names {
+        pokemon::generate_pokemon_page(base_path.clone(), hb, rc, &pokemon_name).await?
+    }
 
     Ok(())
 }
@@ -40,6 +42,8 @@ async fn generate_pokemon_list(rc: &RustemonClient) -> Result<Vec<String>> {
             .for_each(|pokemon_name| pokemon_names.push(pokemon_name.name.unwrap()));
         offset += 100;
     }
+
+    pokemon_names.truncate(5);
 
     Ok(pokemon_names)
 }
