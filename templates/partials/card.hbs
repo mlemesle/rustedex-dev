@@ -8,24 +8,82 @@
 		<table class="table">
   			<tbody>
   				<tr>
-  					<th scope="row">Name</th>
-  			    	<td>{{name_en}} (french: <strong>{{name_fr}}</strong>, japanese: <strong>{{name_jp}}</strong>)</td>
+  					<th scope="row">Nom</th>
+  			    	<td>{{name_fr}} (anglais: <strong>{{name_en}}</strong>, japonais: <strong>{{name_jp}}</strong>)</td>
   			  	</tr>
                 <tr>
   			    	<th scope="row">Types</th>
                     {{> partials/types types}}
   			  	</tr>
                 <tr>
-  			    	<th scope="row">Genus</th>
+  			    	<th scope="row">Catégorie</th>
   			    	<td>{{genus}}</td>
   			  	</tr>
                 <tr>
-					<th scope="row">Height</th>
+					<th scope="row">Taille</th>
 					<td>{{ff32 height}}m</td>
 				</tr>
 				<tr>
-					<th scope="row">Weight</th>
+					<th scope="row">Poids</th>
 					<td>{{ff32 weight}}kg</td>
+				</tr>
+                <tr>
+					<th scope="row">Talents</th>
+					<td>
+						<ol>
+							{{#each abilities}}<li>{{this}}</li>{{/each}}
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">Groupes d'Œuf</th>
+					<td>
+						<ol>
+							{{#each egg_groups}}<li>{{this}}</li>{{/each}}
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">Éclosion</th>
+					<td>{{steps_until_hatch}} pas</td>
+				</tr>
+				<tr>
+					<th scope="row">Points d'effort</th>
+					<td>
+						<ul>
+							{{#each effort_points}}<li>+{{this}} {{@key}}</li>{{/each}}
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">Points d'expérience</th>
+					<td>{{base_experience}} exp.</td>
+				</tr>
+				<tr>
+					<th scope="row">Expérience au niveau 100</th>
+					<td>{{pretty_i64 lvl_100_experience}} exp.</td>
+				</tr>
+				<tr>
+					<th scope="row">Sexe</th>
+					<td>
+					{{#if gender_rates}}
+					{{gender_rates.female}}% femelle, {{gender_rates.male}}% mâle 
+					<div class="progress mw-75">
+						<div class="progress-bar bg-female" role="progressbar" style="width: {{gender_rates.female}}%" aria-valuenow="{{gender_rates.female}}" aria-valuemin="0" aria-valuemax="100"></div>
+  						<div class="progress-bar bg-male" role="progressbar" style="width: {{gender_rates.male}}%" aria-valuenow="{{gender_rates.male}}" aria-valuemin="{{gender_rates.female}}" aria-valuemax="100"></div>
+					</div>
+					{{else}} 
+					Assexué
+					{{/if}}
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">Couleur</th>
+					<td>{{color}}</td>
+				</tr>
+				<tr>
+					<th scope="row">Taux de capture</th>
+					<td>{{capture_rate}}</td>
 				</tr>
 			</tbody>
 		</table>

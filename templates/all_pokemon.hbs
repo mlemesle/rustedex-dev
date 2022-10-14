@@ -1,7 +1,9 @@
-<ul>
-	{{#each pokemon_names as |pn|}}
-		<li>
-			{{pn}}
-		</li>
-	{{/each}}
-</ul>
+<div class="text-center">
+	<ul>
+		{{#each pokemon_names_and_paths as |pokemon_name_and_path|}}
+			<li>
+				  <a href="{{path}}">{{name}}</a>
+			</li>
+		{{/each}}
+	</ul>
+</div>

@@ -2,21 +2,18 @@ use std::path::PathBuf;
 
 use anyhow::Result;
 use handlebars::Handlebars;
-use serde::Serialize;
+use rustemon::client::RustemonClient;
 
 use super::render_to_write;
-
-#[derive(Serialize)]
-struct AllPokemonContext<'a> {
-    pokemon_names: &'a Vec<String>,
-}
+use crate::builders::{all_pokemon::AllPokemon, Builder};
 
 pub(super) async fn generate_all_pokemon_page(
     path: PathBuf,
     hb: &Handlebars<'_>,
-    pokemon_names: &Vec<String>,
+    rc: &RustemonClient,
+    pokemon_names_and_paths: Vec<(String, PathBuf)>,
 ) -> Result<()> {
-    let all_pokemon_context = &AllPokemonContext { pokemon_names };
+    let all_pokemon = &AllPokemon::build(pokemon_names_and_paths, rc).await?;
 
-    render_to_write(hb, "all_pokemon", all_pokemon_context, &path).await
+    render_to_write(hb, "all_pokemon", all_pokemon, &path).await
 }

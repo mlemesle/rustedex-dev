@@ -1,5 +1,6 @@
 use anyhow::Result;
 use handlebars::Handlebars;
+use indicatif::ProgressBar;
 use rustemon::client::RustemonClient;
 use serde::Serialize;
 
@@ -10,16 +11,20 @@ mod pokemon;
 
 pub async fn generate(base_path: PathBuf, hb: &Handlebars<'_>, rc: &RustemonClient) -> Result<()> {
     let pokemon_names = generate_pokemon_list(rc).await?;
-    println!("{} Pokemons found, generating pages", pokemon_names.len());
 
     let mut all_pokemon_path = base_path.clone();
     all_pokemon_path.push("all_pokemon.html");
 
-    all_pokemon::generate_all_pokemon_page(all_pokemon_path, hb, &pokemon_names).await?;
-
+    let mut generated_pokemons = Vec::with_capacity(pokemon_names.len());
+    println!("{} Pokemons found, generating pages", pokemon_names.len());
+    let pg = ProgressBar::new(pokemon_names.len() as u64);
     for pokemon_name in pokemon_names {
-        pokemon::generate_pokemon_page(base_path.clone(), hb, rc, &pokemon_name).await?
+        generated_pokemons
+            .push(pokemon::generate_pokemon_page(base_path.clone(), pokemon_name, hb, rc).await?);
+        pg.inc(1);
     }
+
+    all_pokemon::generate_all_pokemon_page(all_pokemon_path, hb, rc, generated_pokemons).await?;
 
     Ok(())
 }
@@ -43,7 +48,7 @@ async fn generate_pokemon_list(rc: &RustemonClient) -> Result<Vec<String>> {
         offset += 100;
     }
 
-    pokemon_names.truncate(5);
+    // pokemon_names.truncate(5);
 
     Ok(pokemon_names)
 }

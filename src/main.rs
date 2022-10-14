@@ -1,3 +1,5 @@
+#![recursion_limit = "256"]
+
 use std::{
     fs::{create_dir_all, remove_dir_all, DirBuilder, File},
     io::Write,
@@ -12,6 +14,7 @@ use warp::Filter;
 
 mod args;
 mod builders;
+mod find_by_lang;
 mod generators;
 mod handlebars;
 mod utils;
@@ -51,7 +54,7 @@ fn init_rustemon_client() -> RustemonClient {
 }
 
 async fn run(base_path: PathBuf) {
-    let route = warp::path("rustedex").and(warp::fs::dir(base_path));
+    let route = warp::get().and(warp::fs::dir(base_path));
 
     warp::serve(route).run(([0, 0, 0, 0], 3030)).await;
 }
@@ -67,7 +70,8 @@ async fn main() -> Result<()> {
             Err(_) => "Nothing to clean",
         }
     );
-    DirBuilder::new().recursive(true).create(&path)?;
+    DirBuilder::new().create(&path)?;
+    DirBuilder::new().create(path.join("pokemons"))?;
     export_assets(&path)?;
 
     if args.generate {
