@@ -12,9 +12,6 @@ mod pokemon;
 pub async fn generate(base_path: PathBuf, hb: &Handlebars<'_>, rc: &RustemonClient) -> Result<()> {
     let pokemon_names = generate_pokemon_list(rc).await?;
 
-    let mut all_pokemon_path = base_path.clone();
-    all_pokemon_path.push("all_pokemon.html");
-
     let mut generated_pokemons = Vec::with_capacity(pokemon_names.len());
     println!("{} Pokemons found, generating pages", pokemon_names.len());
     let pg = ProgressBar::new(pokemon_names.len() as u64);
@@ -24,7 +21,7 @@ pub async fn generate(base_path: PathBuf, hb: &Handlebars<'_>, rc: &RustemonClie
         pg.inc(1);
     }
 
-    all_pokemon::generate_all_pokemon_page(all_pokemon_path, hb, rc, generated_pokemons).await?;
+    all_pokemon::generate_all_pokemon_page(base_path, hb, rc, generated_pokemons).await?;
 
     Ok(())
 }

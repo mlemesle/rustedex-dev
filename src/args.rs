@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use clap::Parser;
 
 /// Command line arguments
@@ -11,4 +13,7 @@ pub struct Args {
     /// Tells if Rustedex should generate the static files.
     #[arg(short, long)]
     pub generate: bool,
+
+    #[arg(short, long, default_value = "./rustedex-dev")]
+    pub path: PathBuf,
 }

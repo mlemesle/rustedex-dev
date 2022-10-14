@@ -54,7 +54,7 @@ fn init_rustemon_client() -> RustemonClient {
 }
 
 async fn run(base_path: PathBuf) {
-    let route = warp::get().and(warp::fs::dir(base_path));
+    let route = warp::path("rustedex").and(warp::fs::dir(base_path));
 
     warp::serve(route).run(([0, 0, 0, 0], 3030)).await;
 }
@@ -62,27 +62,27 @@ async fn run(base_path: PathBuf) {
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = args::Args::parse();
-    let path = PathBuf::from("./rustedex");
+
     println!(
         "{}",
-        match remove_dir_all(&path) {
+        match remove_dir_all(&args.path) {
             Ok(_) => "Clean successful",
             Err(_) => "Nothing to clean",
         }
     );
-    DirBuilder::new().create(&path)?;
-    DirBuilder::new().create(path.join("pokemons"))?;
-    export_assets(&path)?;
+    DirBuilder::new().create(&args.path)?;
+    DirBuilder::new().create(args.path.join("pokemons"))?;
+    export_assets(&args.path)?;
 
     if args.generate {
         let hb = handlebars::init_handlebars()?;
         let rc = init_rustemon_client();
 
-        generators::generate(path.clone(), &hb, &rc).await?;
+        generators::generate(args.path.clone(), &hb, &rc).await?;
     }
 
     if args.serve {
-        run(path).await;
+        run(args.path).await;
     }
 
     Ok(())
