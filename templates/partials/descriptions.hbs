@@ -1,0 +1,14 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="dropdown">
+            <select id="generationSelect" class="form-select w-auto" aria-label="Choisis une génération">
+                {{#each this}}
+                    <option value="#collapse{{version_id}}">{{version_name}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+    <div id="descriptionsContainer" class="card-body">
+        
+    </div>
+</div>

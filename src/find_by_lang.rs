@@ -2,8 +2,6 @@ use std::iter::Iterator;
 
 use rustemon::model::{pokemon::Genus, resource::Name};
 
-pub(crate) const FR: &str = "fr";
-
 pub(crate) trait FindWordingByLang
 where
     Self: IntoIterator,

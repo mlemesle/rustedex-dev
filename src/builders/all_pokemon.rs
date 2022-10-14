@@ -20,7 +20,11 @@ pub(crate) struct AllPokemon {
 
 #[async_trait]
 impl Builder<Vec<(String, PathBuf)>> for AllPokemon {
-    async fn build(data: Vec<(String, PathBuf)>, _rc: &RustemonClient) -> Result<Self> {
+    async fn build(
+        data: Vec<(String, PathBuf)>,
+        _rc: &RustemonClient,
+        _lang: &String,
+    ) -> Result<Self> {
         let pokemon_names_and_paths = data
             .into_iter()
             .map(|(name, path)| PokemonNameAndPath { name, path })

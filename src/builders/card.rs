@@ -10,7 +10,7 @@ use serde::Serialize;
 
 use super::Builder;
 use crate::{
-    find_by_lang::{self, FindWordingByLang},
+    find_by_lang::FindWordingByLang,
     utils::{
         get_abilities_names_by_lang, get_effort_points_map_by_lang, get_egg_groups_names_by_lang,
     },
@@ -45,7 +45,7 @@ pub(crate) struct Card {
 
 #[async_trait]
 impl Builder<String> for Card {
-    async fn build(id: String, rc: &RustemonClient) -> Result<Self> {
+    async fn build(id: String, rc: &RustemonClient, lang: &String) -> Result<Self> {
         let pokemon = rustemon::pokemon::pokemon::get_by_name(&id, rc).await?;
         let pokemon_specie = pokemon.species.unwrap().follow(rc).await?;
         let growth_rate = pokemon_specie.growth_rate.unwrap().follow(rc).await?;
@@ -92,7 +92,7 @@ impl Builder<String> for Card {
         let genus = pokemon_specie
             .genera
             .unwrap_or_default()
-            .find_by_lang(find_by_lang::FR)
+            .find_by_lang(lang)
             .with_context(|| format!("No genus found for {:?}", pokemon_specie.name))?;
 
         let height = pokemon
@@ -107,25 +107,17 @@ impl Builder<String> for Card {
             as f32
             / 10.0;
 
-        let abilities = get_abilities_names_by_lang(
-            pokemon.abilities.unwrap_or_default(),
-            find_by_lang::FR,
-            rc,
-        )
-        .await?;
+        let abilities =
+            get_abilities_names_by_lang(pokemon.abilities.unwrap_or_default(), lang, rc).await?;
 
-        let egg_groups = get_egg_groups_names_by_lang(
-            pokemon_specie.egg_groups.unwrap_or_default(),
-            find_by_lang::FR,
-            rc,
-        )
-        .await?;
+        let egg_groups =
+            get_egg_groups_names_by_lang(pokemon_specie.egg_groups.unwrap_or_default(), lang, rc)
+                .await?;
 
         let steps_until_hatch = (pokemon_specie.hatch_counter.unwrap_or_default() + 1) * 255;
 
         let effort_points =
-            get_effort_points_map_by_lang(pokemon.stats.unwrap_or_default(), find_by_lang::FR, rc)
-                .await?;
+            get_effort_points_map_by_lang(pokemon.stats.unwrap_or_default(), lang, rc).await?;
 
         let base_experience = pokemon.base_experience.unwrap_or_default();
 
@@ -151,14 +143,8 @@ impl Builder<String> for Card {
         let color = pokemon_color
             .names
             .unwrap_or_default()
-            .find_by_lang(find_by_lang::FR)
-            .with_context(|| {
-                format!(
-                    "No color in {} for {:?}",
-                    find_by_lang::FR,
-                    pokemon_color.name
-                )
-            })?;
+            .find_by_lang(lang)
+            .with_context(|| format!("No color in {} for {:?}", lang, pokemon_color.name))?;
 
         let capture_rate = pokemon_specie.capture_rate.unwrap_or_default();
 

@@ -6,22 +6,24 @@ use serde::Serialize;
 
 use std::path::PathBuf;
 
+use crate::context::Context;
+
 mod all_pokemon;
 mod pokemon;
 
-pub async fn generate(base_path: PathBuf, hb: &Handlebars<'_>, rc: &RustemonClient) -> Result<()> {
-    let pokemon_names = generate_pokemon_list(rc).await?;
+pub(crate) async fn generate(base_path: PathBuf, context: &Context<'_>) -> Result<()> {
+    let pokemon_names = generate_pokemon_list(context.rc()).await?;
 
     let mut generated_pokemons = Vec::with_capacity(pokemon_names.len());
     println!("{} Pokemons found, generating pages", pokemon_names.len());
     let pg = ProgressBar::new(pokemon_names.len() as u64);
     for pokemon_name in pokemon_names {
         generated_pokemons
-            .push(pokemon::generate_pokemon_page(base_path.clone(), pokemon_name, hb, rc).await?);
+            .push(pokemon::generate_pokemon_page(base_path.clone(), pokemon_name, context).await?);
         pg.inc(1);
     }
 
-    all_pokemon::generate_all_pokemon_page(base_path, hb, rc, generated_pokemons).await?;
+    all_pokemon::generate_all_pokemon_page(base_path, generated_pokemons, context).await?;
 
     Ok(())
 }
@@ -45,7 +47,8 @@ async fn generate_pokemon_list(rc: &RustemonClient) -> Result<Vec<String>> {
         offset += 100;
     }
 
-    // pokemon_names.truncate(5);
+    #[cfg(debug_assertions)]
+    pokemon_names.truncate(10);
 
     Ok(pokemon_names)
 }

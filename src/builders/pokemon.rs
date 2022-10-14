@@ -3,18 +3,20 @@ use async_trait::async_trait;
 use rustemon::client::RustemonClient;
 use serde::Serialize;
 
-use super::{card::Card, Builder};
+use super::{card::Card, descriptions::Descriptions, Builder};
 
 #[derive(Serialize)]
 pub(crate) struct Pokemon {
     card: Card,
+    descriptions: Descriptions,
 }
 
 #[async_trait]
 impl Builder<String> for Pokemon {
-    async fn build(id: String, rc: &RustemonClient) -> Result<Self> {
+    async fn build(id: String, rc: &RustemonClient, lang: &String) -> Result<Self> {
         Ok(Pokemon {
-            card: Card::build(id, rc).await?,
+            card: Card::build(id.clone(), rc, lang).await?,
+            descriptions: Descriptions::build(id, rc, lang).await?,
         })
     }
 }

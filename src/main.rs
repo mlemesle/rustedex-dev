@@ -9,14 +9,13 @@ use std::{
 use anyhow::Result;
 use clap::Parser;
 use include_dir::DirEntry;
-use rustemon::client::RustemonClient;
 use warp::Filter;
 
 mod args;
 mod builders;
+mod context;
 mod find_by_lang;
 mod generators;
-mod handlebars;
 mod utils;
 
 const ASSETS: include_dir::Dir = include_dir::include_dir!("./assets");
@@ -49,10 +48,6 @@ fn inner_export_assets(path: &Path, entries: &[DirEntry]) -> Result<()> {
     Ok(())
 }
 
-fn init_rustemon_client() -> RustemonClient {
-    RustemonClient::default()
-}
-
 async fn run(base_path: PathBuf) {
     let route = warp::path("rustedex").and(warp::fs::dir(base_path));
 
@@ -75,10 +70,8 @@ async fn main() -> Result<()> {
     export_assets(&args.path)?;
 
     if args.generate {
-        let hb = handlebars::init_handlebars()?;
-        let rc = init_rustemon_client();
-
-        generators::generate(args.path.clone(), &hb, &rc).await?;
+        let context = context::Context::try_new()?;
+        generators::generate(args.path.clone(), &context).await?;
     }
 
     if args.serve {

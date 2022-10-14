@@ -5,6 +5,7 @@ use serde::Serialize;
 
 pub(crate) mod all_pokemon;
 pub(crate) mod card;
+pub(crate) mod descriptions;
 pub(crate) mod pokemon;
 
 #[async_trait]
@@ -12,5 +13,5 @@ pub(crate) trait Builder<T>
 where
     Self: Sized + Serialize,
 {
-    async fn build(data: T, rc: &RustemonClient) -> Result<Self>;
+    async fn build(data: T, rc: &RustemonClient, lang: &String) -> Result<Self>;
 }
