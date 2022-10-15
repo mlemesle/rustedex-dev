@@ -1,9 +1,14 @@
-<div class="text-center">
-	<ul>
-		{{#each pokemon_names_and_paths as |pokemon_name_and_path|}}
-			<li>
-				  <a href="{{path}}">{{name}}</a>
-			</li>
-		{{/each}}
-	</ul>
+<div class="d-flex flex-row flex-wrap align-content-stretch justify-content-evenly">
+	{{#each pokemon_names_and_paths_by_letter}}
+	<div class="card text-center flex-fill m-2">
+		<div class="card-body">
+			<h2 class="card-title">{{@key}}</h2>
+			<div class="list-group">
+				{{#each this}}
+					<a href="{{path}}" class="list-group-item list-group-item-action">#{{id}} {{name}}</a>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+	{{/each}}
 </div>

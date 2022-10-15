@@ -16,7 +16,7 @@ handlebars = { version = "4.3.5", features = ["dir_source"] }
 include_dir = "0.7.2"
 indicatif = "0.17.1"
 num-format = "0.4.3"
-rustemon = "2.1.0"
+rustemon = "2.1.1"
 serde = { version = "1.0.145", features = ["derive"] }
 serde_json = "1.0.86"
 tokio = { version = "1.21.2", features = ["fs", "macros", "rt-multi-thread"] }

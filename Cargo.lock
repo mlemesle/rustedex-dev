@@ -1509,9 +1509,9 @@ dependencies = [
 
 [[package]]
 name = "rustemon"
-version = "2.1.0"
+version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6870854c7cfa56f9240030a6f4f0ce45575d94915249ee30556b521997fe797b"
+checksum = "d3e6a7540464f475ba510c6b7acb7b29629eed982df4a7466ce159feb2301ee5"
 dependencies = [
  "http-cache-reqwest",
  "log",
