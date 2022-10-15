@@ -13,5 +13,5 @@ pub(crate) trait Builder<T>
 where
     Self: Sized + Serialize,
 {
-    async fn build(data: T, rc: &RustemonClient, lang: &String) -> Result<Self>;
+    async fn build(data: T, rc: &RustemonClient, lang: &str) -> Result<Self>;
 }

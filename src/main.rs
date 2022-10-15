@@ -72,9 +72,11 @@ async fn main() -> Result<()> {
     if args.generate {
         let context = context::Context::try_new()?;
         generators::generate(args.path.clone(), &context).await?;
+        println!("Static file generated at {}", args.path.display());
     }
 
     if args.serve {
+        println!("Starting server at http://localhost:3030/rustedex/index.html");
         run(args.path).await;
     }
 

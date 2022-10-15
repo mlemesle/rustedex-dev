@@ -1,14 +1,44 @@
 <div class="card mb-3">
     <div class="card-header">
         <div class="dropdown">
-            <select id="generationSelect" class="form-select w-auto" aria-label="Choisis une génération">
-                {{#each this}}
-                    <option value="#collapse{{version_id}}">{{version_name}}</option>
+            <select id="generationSelect" class="form-select w-auto" aria-label="Choose a generation">
+                {{#each generation_id_to_names}}
+                    <option value="#collapse-{{@key}}">{{this}}</option>
                 {{/each}}
             </select>
         </div>
     </div>
     <div id="descriptionsContainer" class="card-body">
-        
+        {{#each generation_id_to_version_name_and_flavor_text}}
+                <div class="collapse" id="collapse-{{@key}}">
+                    <ul class="list-group">
+                        {{#each this}}
+                            <li class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{version_name}}</h5>
+                                </div>
+                                <p class="mb-1">{{flavor_text}}</p>
+                            </li>
+                        {{/each}}
+                    </ul>
+                </div>
+        {{/each}}        
     </div>
 </div>
+
+<script>
+    $( document ).ready(function() {
+    $("#generationSelect").on('change', function(e){
+        var showedDescription = $('#descriptionsContainer .collapse\\.show');
+        showedDescription.removeClass('collapse.show');
+        showedDescription.addClass('collapse');
+        var targetDescription = $($(this).val());
+        targetDescription.removeClass('collapse');
+        targetDescription.addClass('collapse.show');
+    });
+
+    var firstDescription = $("#descriptionsContainer .collapse").first();
+    firstDescription.removeClass('collapse');
+    firstDescription.addClass('collapse.show');
+});
+</script>

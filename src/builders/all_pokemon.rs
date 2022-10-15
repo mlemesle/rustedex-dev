@@ -23,7 +23,7 @@ impl Builder<Vec<(String, PathBuf)>> for AllPokemon {
     async fn build(
         data: Vec<(String, PathBuf)>,
         _rc: &RustemonClient,
-        _lang: &String,
+        _lang: &str,
     ) -> Result<Self> {
         let pokemon_names_and_paths = data
             .into_iter()

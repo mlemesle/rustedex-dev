@@ -45,7 +45,7 @@ pub(crate) struct Card {
 
 #[async_trait]
 impl Builder<String> for Card {
-    async fn build(id: String, rc: &RustemonClient, lang: &String) -> Result<Self> {
+    async fn build(id: String, rc: &RustemonClient, lang: &str) -> Result<Self> {
         let pokemon = rustemon::pokemon::pokemon::get_by_name(&id, rc).await?;
         let pokemon_specie = pokemon.species.unwrap().follow(rc).await?;
         let growth_rate = pokemon_specie.growth_rate.unwrap().follow(rc).await?;
