@@ -76,7 +76,7 @@ async fn main() -> Result<()> {
     }
 
     if args.serve {
-        println!("Starting server at http://localhost:3030/rustedex/index.html");
+        println!("Starting server at http://localhost:3030/rustedex/search.html");
         run(args.path).await;
     }
 

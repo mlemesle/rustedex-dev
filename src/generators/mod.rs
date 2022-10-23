@@ -8,8 +8,8 @@ use std::path::PathBuf;
 
 use crate::context::Context;
 
-mod all_pokemon;
 mod pokemon;
+mod search;
 
 pub(crate) async fn generate(base_path: PathBuf, context: &Context<'_>) -> Result<()> {
     let pokemon_names = generate_pokemon_list(context.rc()).await?;
@@ -23,7 +23,7 @@ pub(crate) async fn generate(base_path: PathBuf, context: &Context<'_>) -> Resul
         pg.inc(1);
     }
 
-    all_pokemon::generate_all_pokemon_page(base_path, generated_pokemons, context).await?;
+    search::generate_search_page(base_path, generated_pokemons, context).await?;
 
     Ok(())
 }

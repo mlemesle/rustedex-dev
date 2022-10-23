@@ -1,0 +1,33 @@
+<div class="input-group input-group sticky-top m-2">
+	<input id="search-input" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="input-search">
+	<select id="search-lang" class="form-select" aria-label="Language search">
+		<option value="en" selected>English</option>
+		<option value="fr">French</option>
+	</select>
+	<button id="search-button" class="btn btn-primary" type="button">Search</button>
+</div>
+
+<div class="d-flex flex-wrap">
+	{{#each search_elements}}
+		<a href="{{path}}" class="border radial-out p-1 search-element text-decoration-none text-reset bg-secondary bg-gradient bg-opacity-25" data-name-fr="{{search_name_fr}}" data-name-en="{{search_name_en}}"> 
+			<div class="d-flex align-items-center">
+				<img src="{{sprite}}" class="float-start" alt="Sprite of {{display_name}}">
+				<p class="card-text">#{{id}} {{display_name}}</p>
+			</div>
+		</a>
+{{/each}}
+</div>
+
+<script>
+	$("#search-button").click( () => {
+		var input = $("#search-input").val().normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '').toLowerCase();
+		$(".search-element").hide();
+		var lang = $("#search-lang").val();
+		$(".search-element").each(function() {
+			var name = lang == "en" ? $(this).data("name-en") : $(this).data("name-fr");
+			if (name.includes(input)) {
+				$(this).show();
+			}
+		});
+	});
+</script>
