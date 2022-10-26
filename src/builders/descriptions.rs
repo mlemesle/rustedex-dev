@@ -35,8 +35,8 @@ impl Descriptions {
 
 #[async_trait]
 impl Builder<String> for Descriptions {
-    async fn build(id: String, rc: &RustemonClient, lang: &str) -> Result<Self> {
-        let flavor_text_entries = rustemon::pokemon::pokemon::get_by_name(&id, rc)
+    async fn build(id: &String, rc: &RustemonClient, lang: &str) -> Result<Self> {
+        let flavor_text_entries = rustemon::pokemon::pokemon::get_by_name(id, rc)
             .await?
             .species
             .with_context(|| format!("No species for {}", id))?

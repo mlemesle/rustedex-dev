@@ -1,4 +1,4 @@
-<div class="input-group input-group sticky-top m-2">
+<div class="input-group input-group sticky-top my-2">
 	<input id="search-input" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="input-search">
 	<select id="search-lang" class="form-select" aria-label="Language search">
 		<option value="en" selected>English</option>
@@ -7,18 +7,25 @@
 	<button id="search-button" class="btn btn-primary" type="button">Search</button>
 </div>
 
-<div class="d-flex flex-wrap">
+<div id="search-result" class="list-group w-100" >
 	{{#each search_elements}}
-		<a href="{{path}}" class="border radial-out p-1 search-element text-decoration-none text-reset bg-secondary bg-gradient bg-opacity-25" data-name-fr="{{search_name_fr}}" data-name-en="{{search_name_en}}"> 
-			<div class="d-flex align-items-center">
-				<img src="{{sprite}}" class="float-start" alt="Sprite of {{display_name}}">
-				<p class="card-text">#{{id}} {{display_name}}</p>
+		<div class="list-group-item list-group-item-action card search-element"  data-name-fr="{{search_name_fr}}" data-name-en="{{search_name_en}}">
+			<div class="row">
+				<div class="col-4"> 
+					<img src="{{sprite}}" class="img-fluid rounded-start" alt="Sprite of {{display_name}}">
+				</div>
+				<div class="col-8">
+					<p class="card-text">#{{id}} {{display_name}}</p>
+				</div>
 			</div>
-		</a>
-{{/each}}
+			<a href="{{path}}" class="stretched-link"></a>
+		</div>
+	{{/each}}
 </div>
 
 <script>
+	$("#search-result").hide();
+
 	$("#search-button").click( () => {
 		var input = $("#search-input").val().normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '').toLowerCase();
 		$(".search-element").hide();
@@ -29,5 +36,6 @@
 				$(this).show();
 			}
 		});
+		$("#search-result").show();
 	});
 </script>

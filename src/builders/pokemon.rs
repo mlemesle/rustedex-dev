@@ -13,9 +13,9 @@ pub(crate) struct Pokemon {
 
 #[async_trait]
 impl Builder<String> for Pokemon {
-    async fn build(id: String, rc: &RustemonClient, lang: &str) -> Result<Self> {
+    async fn build(id: &String, rc: &RustemonClient, lang: &str) -> Result<Self> {
         Ok(Pokemon {
-            card: Card::build(id.clone(), rc, lang).await?,
+            card: Card::build(id, rc, lang).await?,
             descriptions: Descriptions::build(id, rc, lang).await?,
         })
     }

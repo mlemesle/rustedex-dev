@@ -10,11 +10,11 @@ use anyhow::Result;
 
 pub(super) async fn generate_search_page(
     mut path: PathBuf,
-    pokemon_id_and_names_and_paths: Vec<(String, PathBuf)>,
+    pokemon_id_and_names_and_paths: &Vec<(String, PathBuf)>,
     context: &Context<'_>,
 ) -> Result<()> {
-    let all_pokemon =
+    let search =
         &Search::build(pokemon_id_and_names_and_paths, context.rc(), context.lang()).await?;
     path.push("search.html");
-    render_to_write(context.hb(), "search", all_pokemon, &path).await
+    render_to_write(context.hb(), "search", search, &path).await
 }

@@ -9,6 +9,8 @@ pub(crate) struct Context<'a> {
     lang: String,
 }
 
+const SPLITTER_SRC: &str = include_str!("../scripts/splitter.rhai");
+
 handlebars_helper!(ff32: |number: f32| format!("{:09.3}", number.to_string()));
 
 handlebars_helper!(pretty_i64: |number: i64| number.to_formatted_string(&Locale::fr));
@@ -19,6 +21,8 @@ fn init_handlebars() -> Result<Handlebars<'static>> {
 
     hb.register_helper("ff32", Box::new(ff32));
     hb.register_helper("pretty_i64", Box::new(pretty_i64));
+
+    hb.register_script_helper("splitter", SPLITTER_SRC)?;
 
     hb.register_templates_directory(".hbs", "templates/")?;
 

@@ -1,0 +1,13 @@
+<div class="container text-center">
+	{{#each (splitter pokemon_elements 3)}}
+		<div class="list-group list-group-horizontal">
+			{{#each this}}
+				<div class="list-group-item list-group-item-action card p-1">
+					<img src="{{sprite}}" class="card-img-top" alt="Sprite of {{display_name}}">
+					<p class="card-text">{{display_name}}</p>
+					<a href="{{path}}" class="stretched-link"></a>
+				</div>
+			{{/each}}
+		</div>
+	{{/each}}
+</div>

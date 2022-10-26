@@ -3,31 +3,28 @@ use std::path::PathBuf;
 use anyhow::{Context, Result};
 use async_trait::async_trait;
 use rustemon::client::RustemonClient;
-use serde::{Deserialize, Serialize};
-use unidecode::unidecode;
+use serde::Serialize;
 
 use super::Builder;
 use crate::find_by_lang::FindWordingByLang;
 
-#[derive(Serialize, Deserialize)]
-pub(crate) struct SearchElement {
+#[derive(Serialize)]
+pub(crate) struct PokemonElement {
     id: i64,
-    search_name_en: String,
-    search_name_fr: String,
     display_name: String,
     sprite: String,
     path: PathBuf,
 }
 
 #[derive(Serialize)]
-pub(crate) struct Search {
-    search_elements: Vec<SearchElement>,
+pub(crate) struct AllPokemon {
+    pokemon_elements: Vec<PokemonElement>,
 }
 
 #[async_trait]
-impl Builder<Vec<(String, PathBuf)>> for Search {
+impl Builder<Vec<(String, PathBuf)>> for AllPokemon {
     async fn build(data: &Vec<(String, PathBuf)>, rc: &RustemonClient, lang: &str) -> Result<Self> {
-        let mut search_elements = Vec::with_capacity(data.len());
+        let mut pokemon_elements = Vec::with_capacity(data.len());
 
         for (pokemon_id, path) in data {
             let pokemon = rustemon::pokemon::pokemon::get_by_name(pokemon_id, rc).await?;
@@ -59,11 +56,6 @@ impl Builder<Vec<(String, PathBuf)>> for Search {
             let display_name = names
                 .find_by_lang(lang)
                 .with_context(|| format!("No {} name for {}", lang, pokemon_id))?;
-            let search_name_fr = names
-                .find_by_lang("fr")
-                .with_context(|| format!("No {} name for {}", "fr", pokemon_id))?
-                .to_lowercase();
-            let search_name_fr = unidecode(&search_name_fr);
 
             let pokemon_sprite = pokemon
                 .sprites
@@ -76,16 +68,14 @@ impl Builder<Vec<(String, PathBuf)>> for Search {
                     )
                 });
 
-            search_elements.push(SearchElement {
+            pokemon_elements.push(PokemonElement {
                 id: pokemon_index,
-                search_name_en: display_name.to_lowercase(),
-                search_name_fr,
                 display_name,
                 sprite: pokemon_sprite,
                 path: path.clone(),
             });
         }
 
-        Ok(Self { search_elements })
+        Ok(Self { pokemon_elements })
     }
 }

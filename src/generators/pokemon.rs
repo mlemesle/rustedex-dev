@@ -16,7 +16,7 @@ pub(super) async fn generate_pokemon_page(
     let relative_path = PathBuf::from(format!("pokemons/{}.html", pokemon_id));
     path.push(&relative_path);
 
-    let pokemon = Pokemon::build(pokemon_id.clone(), context.rc(), context.lang()).await?;
+    let pokemon = Pokemon::build(&pokemon_id, context.rc(), context.lang()).await?;
 
     render_to_write(context.hb(), "pokemon", &pokemon, &path).await?;
 

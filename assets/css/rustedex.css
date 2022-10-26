@@ -11,41 +11,7 @@ img.type {
     background-color: rgb(236, 152, 152);
 }
 
-.search-element {
-    width: fit-content;
-}
-
-.radial-out {
-  overflow: hidden;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -moz-osx-font-smoothing: grayscale;
-  position: relative;
-  -webkit-transition: color 300ms;
-  transition: color 300ms;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0); 
-}
-
-.radial-out:before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #2098d1;
-    border-radius: 100%;
-    -webkit-transform: scale(0);
-    transform: scale(0);
-    -webkit-transition-property: transform;
-    transition-property: transform;
-    -webkit-transition: 300ms ease-out;
-    transition: 300ms ease-out; 
-}
-
-.radial-out:hover:before {
-    -webkit-transform: scale(2);
-    transform: scale(2); 
+.bg-pokemon-red {
+    background-color: #cc0000;
+    color: white !important;
 }

@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <title>Rustedex</title>
   <meta name="description" content="A Pokedex, written in Rust.">
@@ -17,6 +18,15 @@
 </head>
 
 <body>
+  <nav class="navbar navbar-dark navbar-expand bg-pokemon-red">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/rustedex/home.html">Rustedex</a>
+      <div class="navbar-nav">
+        <a class="nav-link" href="/rustedex/all_pokemon.html">All Pokémon</a>
+        <a class="nav-link" href="/rustedex/search.html">Search</a>
+      </div>
+    </div>
+  </nav>
   <div class="container-xl m-3 mx-auto">
     {{> (lookup this "inner_template") data}}
   </div>
