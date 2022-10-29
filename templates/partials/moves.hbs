@@ -1,0 +1,17 @@
+<div class="table-responsive">
+  <table class="table caption-top">
+	<caption>Moves learned by {{pokemon_name}}</caption>
+	<thead>
+		<tr>
+			<th scope="col">Name</th>
+		<tr>
+	</thead>
+	<tbody>
+		{{#each moves as |move|}}
+		<tr>
+			<th scope="row">{{move.name}}</th>
+		</tr>
+		{{/each}}
+	</tbody>
+  </table>
+</div>

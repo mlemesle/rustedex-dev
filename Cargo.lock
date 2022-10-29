@@ -148,9 +148,9 @@ checksum = "7a40729d2133846d9ed0ea60a8b9541bccddab49cd30f0715a1da672fe9a2524"
 
 [[package]]
 name = "async-trait"
-version = "0.1.57"
+version = "0.1.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "76464446b8bc32758d7e88ee1a804d9914cd9b1cb264c029899680b0be29826f"
+checksum = "1e805d94e6b5001b651426cf4cd446b1ab5f319d27bab5c644f61de0a804360c"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1559,10 +1559,11 @@ dependencies = [
 
 [[package]]
 name = "rustemon"
-version = "2.1.1"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d3e6a7540464f475ba510c6b7acb7b29629eed982df4a7466ce159feb2301ee5"
+checksum = "12c74b346c1c05467728d61b3f6431b170b9ab8634da0e872686fb4a6bf8bbfa"
 dependencies = [
+ "async-trait",
  "http-cache-reqwest",
  "log",
  "reqwest",

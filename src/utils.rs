@@ -7,6 +7,7 @@ use rustemon::{
         pokemon::{EggGroup, PokemonAbility, PokemonStat},
         resource::NamedApiResource,
     },
+    Follow,
 };
 
 use crate::find_by_lang::FindWordingByLang;
