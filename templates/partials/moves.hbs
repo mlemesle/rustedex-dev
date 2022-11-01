@@ -1,17 +1,43 @@
 <div class="table-responsive">
   <table class="table caption-top">
-	<caption>Moves learned by {{pokemon_name}}</caption>
+	<caption>Moves learned by {{pokemon_name}}
+	<div class="dropdown float-end">
+            <select id="by-level-version-select" class="form-select w-auto" aria-label="Choose a version">
+                {{#each version_group_id_and_names}}
+                    <option value="#by-level-{{this.0}}">{{this.1}}</option>
+                {{/each}}
+            </select>
+        </div>
+	</caption>
 	<thead>
 		<tr>
 			<th scope="col">Name</th>
+			<th scope="col">Lvl</th>
 		<tr>
 	</thead>
-	<tbody>
-		{{#each moves as |move|}}
-		<tr>
-			<th scope="row">{{move.name}}</th>
-		</tr>
-		{{/each}}
-	</tbody>
+	{{#each moves_learned_by_level_by_version_group}}
+		<tbody id="by-level-{{@key}}" class="all-by-levels">
+			{{#each this as |move_by_level|}}
+			<tr>
+				<th scope="row">{{move_by_level.name}}</th>
+				<td>{{move_by_level.lvl_learned_at}}</td>
+			</tr>
+			{{/each}}
+		</tbody>
+	{{/each}}
   </table>
 </div>
+
+<script>
+	$(".all-by-levels").hide();
+	
+	$("#by-level-version-select").on('change', function(e) {
+		$(".all-by-levels").hide();
+		console.log($(this).val());
+		var target = $($(this).val());
+		console.log(target);
+		target.show();
+	});
+	
+	$(".all-by-levels").first().show();
+</script>
