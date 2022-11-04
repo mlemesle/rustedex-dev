@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, hash::Hash};
 
 use anyhow::{Context, Result};
 use rustemon::{
@@ -7,6 +7,7 @@ use rustemon::{
         pokemon::{EggGroup, PokemonAbility, PokemonStat},
         resource::NamedApiResource,
     },
+    Follow,
 };
 
 use crate::find_by_lang::FindWordingByLang;
@@ -80,4 +81,53 @@ pub(crate) async fn get_effort_points_map_by_lang(
     }
 
     Ok(result)
+}
+
+pub(crate) fn fuse_maps_in_place<K, V>(first: &mut HashMap<K, Vec<V>>, second: HashMap<K, Vec<V>>)
+where
+    K: Eq + Hash,
+{
+    second
+        .into_iter()
+        .for_each(|(k, v)| first.entry(k).or_insert_with(Vec::new).extend(v));
+}
+
+pub(crate) fn get_version_group_id_and_names(
+    to_retain: Vec<&String>,
+) -> Vec<(&'static str, &'static str)> {
+    Vec::from([
+        ("red-blue", "Red & Blue"),
+        ("yellow", "Yellow"),
+        ("gold-silver", "Gold & Silver"),
+        ("crystal", "Crystal"),
+        ("ruby-sapphire", "Ruby & Sapphire"),
+        ("emerald", "Emerald"),
+        ("firered-leafgreen", "Fire Red & Leaf Green"),
+        ("diamond-pearl", "Diamond & Pearl"),
+        ("platinum", "Platinum"),
+        ("heartgold-soulsilver", "HeartGold & SoulSilver"),
+        ("black-white", "Black & White"),
+        ("colosseum", "Colosseum"),
+        ("xd", "XD"),
+        ("black-2-white-2", "Black 2 & White 2"),
+        ("x-y", "X & Y"),
+        ("omega-ruby-alpha-sapphire", "Omega Ruby & Alpha Sapphire"),
+        ("sun-moon", "Sun & Moon"),
+        ("ultra-sun-ultra-moon", "Ultra Sun & Ultra Moon"),
+        (
+            "lets-go-pikachu-lets-go-eevee",
+            "Let's Go Pikachu & Let's Go Eevee",
+        ),
+        ("sword-shield", "Sword & Shield"),
+        ("the-isle-of-armor", "The isle of Armor"),
+        ("the-crown-tundra", "The crown Tundra"),
+        (
+            "brilliant-diamond-and-shining-pearl",
+            "Brilliant Diamond & Shining Pearl",
+        ),
+        ("legends-arceus", "Legends Arceus"),
+    ])
+    .into_iter()
+    .filter(|&elem| to_retain.contains(&&elem.0.to_string()))
+    .collect()
 }

@@ -52,7 +52,7 @@ async fn generate_pokemon_list(rc: &RustemonClient) -> Result<Vec<String>> {
     }
 
     #[cfg(debug_assertions)]
-    pokemon_names.truncate(10);
+    pokemon_names.truncate(1);
 
     Ok(pokemon_names)
 }

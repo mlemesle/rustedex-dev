@@ -1,0 +1,95 @@
+<div class="card mb-3">
+    <div class="card-header">
+		<div class="dropdown float-end">
+            <select id="version-select" class="form-select w-auto" aria-label="Choose a version">
+                {{#each version_group_id_and_names}}
+                    <option value=".moves-{{this.0}}">{{this.1}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+	
+	<div class="card-body">
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped table-hover text-center caption-top align-middle">
+					<caption>Moves learned per level by {{pokemon_name}}</caption>
+					<thead>
+						<tr>
+							<th scope="col">Name</th>
+							<th scope="col">Level</th>
+							<th scope="col">Type</th>
+							<th scope="col">Category</th>
+							<th scope="col">Power</th>
+							<th scope="col">Accuracy</th>
+							<th scope="col">PP</th>
+						<tr>
+					</thead>
+					{{#each moves_learned_by_level_by_version_group}}
+						<tbody class="all-by-levels moves-{{@key}}">
+							{{#each this}}
+							<tr>
+								<th scope="row">{{name}}</th>
+								<td>{{lvl_learned_at}}</td>
+								<td>{{> partials/type type_}}</td>
+								<td>{{> partials/category category}}</td>
+								<td>{{#if power}} {{power}} {{else}} &mdash; {{/if}}</td>
+								<td>{{#if accuracy}} {{accuracy}} {{else}} &mdash; {{/if}}</td>
+								<td>{{#if pp}} {{pp}} {{else}} &mdash; {{/if}}</td>
+							</tr>
+							{{/each}}
+						</tbody>
+					{{/each}}
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped table-hover text-center caption-top align-middle">
+					<caption>Moves learned by machines by {{pokemon_name}}</caption>
+					<thead>
+						<tr>
+							<th scope="col">Name</th>
+							<th scope="col">TM</th>
+							<th scope="col">Type</th>
+							<th scope="col">Category</th>
+							<th scope="col">Power</th>
+							<th scope="col">Accuracy</th>
+							<th scope="col">PP</th>
+						<tr>
+					</thead>
+					{{#each moves_learned_by_machine_by_version_group}}
+						<tbody class="all-by-machines moves-{{@key}}">
+							{{#each this}}
+							<tr>
+								<th scope="row">{{name}}</th>
+								<td>{{machine_name}}</td>
+								<td>{{> partials/type type_}}</td>
+								<td>{{> partials/category category}}</td>
+								<td>{{#if power}} {{power}} {{else}} &mdash; {{/if}}</td>
+								<td>{{#if accuracy}} {{accuracy}} {{else}} &mdash; {{/if}}</td>
+								<td>{{#if pp}} {{pp}} {{else}} &mdash; {{/if}}</td>
+							</tr>
+							{{/each}}
+						</tbody>
+					{{/each}}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(".all-by-levels").hide();
+	$(".all-by-machines").hide();
+	
+	$("#version-select").on('change', function(e) {
+		$(".all-by-levels").hide();
+		$(".all-by-machines").hide();
+		var target = $($(this).val());
+		target.show();
+	});
+	
+	$(".all-by-levels").first().show();
+	$(".all-by-machines").first().show();
+</script>

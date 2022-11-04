@@ -5,6 +5,7 @@ use async_trait::async_trait;
 use rustemon::{
     client::RustemonClient,
     model::resource::{Name, NamedApiResource},
+    Follow,
 };
 use serde::Serialize;
 

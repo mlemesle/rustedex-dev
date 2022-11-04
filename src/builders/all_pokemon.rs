@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use anyhow::{Context, Result};
 use async_trait::async_trait;
-use rustemon::client::RustemonClient;
+use rustemon::{client::RustemonClient, Follow};
 use serde::Serialize;
 
 use super::Builder;
