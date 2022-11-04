@@ -3,6 +3,11 @@ img.type {
     height: 19px;
 }
 
+img.category {
+    width: 43px;
+    height: 22px;
+}
+
 .bg-male {
     background-color: rgb(19, 116, 226) !important;
 }

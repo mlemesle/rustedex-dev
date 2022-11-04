@@ -13,7 +13,12 @@
   			  	</tr>
                 <tr>
   			    	<th scope="row">Types</th>
-                    {{> partials/types types}}
+                    <td>
+						{{#each types as |type|}}
+							{{> partials/type type}}
+						{{/each}}
+					</td>
+					
   			  	</tr>
                 <tr>
   			    	<th scope="row">Genus</th>
