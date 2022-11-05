@@ -20,3 +20,27 @@ img.category {
     background-color: #cc0000;
     color: white !important;
 }
+
+.damage-Immune {
+    background-color: #AAAAAA;
+}
+
+.damage-Quarter {
+    background-color: #2cba00;
+}
+
+.damage-Half {
+    background-color: #a3ff00;
+}
+
+.damage-Simple {
+    background-color: #fff400;
+}
+
+.damage-Double {
+    background-color: #ffa700;
+}
+
+.damage-Quadruple {
+    background-color: #ff0000;
+}

@@ -8,6 +8,7 @@ pub(crate) mod descriptions;
 pub(crate) mod moves;
 pub(crate) mod pokemon;
 pub(crate) mod search;
+pub(crate) mod weaknesses;
 
 #[async_trait]
 pub(crate) trait Builder<T>
