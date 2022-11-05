@@ -131,3 +131,26 @@ pub(crate) fn get_version_group_id_and_names(
     .filter(|&elem| to_retain.contains(&&elem.0.to_string()))
     .collect()
 }
+
+pub(crate) fn get_type_ids() -> Vec<String> {
+    vec![
+        "normal".to_string(),
+        "fighting".to_string(),
+        "flying".to_string(),
+        "poison".to_string(),
+        "ground".to_string(),
+        "rock".to_string(),
+        "bug".to_string(),
+        "ghost".to_string(),
+        "steel".to_string(),
+        "fire".to_string(),
+        "water".to_string(),
+        "grass".to_string(),
+        "electric".to_string(),
+        "psychic".to_string(),
+        "ice".to_string(),
+        "dragon".to_string(),
+        "dark".to_string(),
+        "fairy".to_string(),
+    ]
+}

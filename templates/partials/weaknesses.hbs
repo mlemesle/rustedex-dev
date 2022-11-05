@@ -1,0 +1,15 @@
+<div class="card">
+	<div class="card-header fw-bold">Weaknesses</div>
+	<div class="card-body container row row-cols-3 row-cols-sm-6 g-3 text-center">
+		{{#each this}}
+			<div class="col">
+				<div class="card">
+					<div class="card-body damage-{{this}} bg-gradient">
+						<div class="card-text text-capitalized">x{{damage_multiplicator_to_f32 this}}</div>
+					</div>
+					<img src="/rustedex/assets/images/types/{{@key}}.png" class="card-img-bottom">
+				</div>
+			</div>
+		{{/each}}
+	</div>
+</div>

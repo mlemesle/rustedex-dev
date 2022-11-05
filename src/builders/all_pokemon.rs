@@ -63,7 +63,7 @@ impl Builder<Vec<(String, PathBuf)>> for AllPokemon {
                 .front_default
                 .unwrap_or_else(|| {
                     format!(
-                        "/rustedex/assets/images/sprites/{}.png",
+                        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{}.png",
                         pokemon.id.unwrap()
                     )
                 });
