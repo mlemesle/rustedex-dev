@@ -56,10 +56,7 @@ pub(crate) struct Weaknesses(HashMap<String, DamageMultiplicator>);
 #[async_trait]
 impl Builder<String> for Weaknesses {
     async fn build(id: &String, rc: &RustemonClient, _lang: &str) -> Result<Self> {
-        let types = rustemon::pokemon::pokemon::get_by_name(id, rc)
-            .await?
-            .types
-            .unwrap();
+        let types = rustemon::pokemon::pokemon::get_by_name(id, rc).await?.types;
 
         let mut weaknesses: HashMap<_, _> = utils::get_type_ids()
             .into_iter()
@@ -67,24 +64,18 @@ impl Builder<String> for Weaknesses {
             .collect();
 
         for type_ in types {
-            let damage_relations = type_
-                .type_
-                .unwrap()
-                .follow(rc)
-                .await?
-                .damage_relations
-                .unwrap();
+            let damage_relations = type_.type_.follow(rc).await?.damage_relations;
 
-            for dr in damage_relations.half_damage_from.unwrap_or_default() {
-                *weaknesses.entry(dr.name.unwrap()).or_default() += DamageMultiplicator::Half;
+            for dr in damage_relations.half_damage_from {
+                *weaknesses.entry(dr.name).or_default() += DamageMultiplicator::Half;
             }
 
-            for dr in damage_relations.double_damage_from.unwrap_or_default() {
-                *weaknesses.entry(dr.name.unwrap()).or_default() += DamageMultiplicator::Double;
+            for dr in damage_relations.double_damage_from {
+                *weaknesses.entry(dr.name).or_default() += DamageMultiplicator::Double;
             }
 
-            for dr in damage_relations.no_damage_from.unwrap_or_default() {
-                *weaknesses.entry(dr.name.unwrap()).or_default() += DamageMultiplicator::Immune;
+            for dr in damage_relations.no_damage_from {
+                *weaknesses.entry(dr.name).or_default() += DamageMultiplicator::Immune;
             }
         }
 

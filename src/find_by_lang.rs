@@ -12,15 +12,15 @@ where
 impl FindWordingByLang for Vec<Genus> {
     fn find_by_lang(&self, lang: &str) -> Option<String> {
         self.iter()
-            .find(|genus| genus.language.as_ref().unwrap().name == Some(lang.into()))
-            .and_then(|genus| genus.genus.clone())
+            .find(|genus| genus.language.name == lang)
+            .map(|genus| genus.genus.clone())
     }
 }
 
 impl FindWordingByLang for Vec<Name> {
     fn find_by_lang(&self, lang: &str) -> Option<String> {
         self.iter()
-            .find(|name| name.language.as_ref().unwrap().name == Some(lang.into()))
-            .and_then(|name| name.name.clone())
+            .find(|name| name.language.name == lang)
+            .map(|name| name.name.clone())
     }
 }

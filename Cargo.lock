@@ -1559,9 +1559,9 @@ dependencies = [
 
 [[package]]
 name = "rustemon"
-version = "2.2.0"
+version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "12c74b346c1c05467728d61b3f6431b170b9ab8634da0e872686fb4a6bf8bbfa"
+checksum = "8ac1710d2296655b02e662007d515097ef1eed759dfb9327b6cbee8ba5987151"
 dependencies = [
  "async-trait",
  "http-cache-reqwest",
