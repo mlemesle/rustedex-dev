@@ -40,26 +40,19 @@ impl Builder<String> for Descriptions {
         let flavor_text_entries = rustemon::pokemon::pokemon::get_by_name(id, rc)
             .await?
             .species
-            .with_context(|| format!("No species for {}", id))?
             .follow(rc)
             .await?
-            .flavor_text_entries
-            .unwrap_or_default();
+            .flavor_text_entries;
 
         let mut descriptions = Descriptions::new();
 
         for flavor_text_entry in flavor_text_entries {
             if let FlavorText {
-                flavor_text: Some(flavor_text),
-                language:
-                    Some(NamedApiResource {
-                        name: Some(language),
-                        ..
-                    }),
+                flavor_text,
+                language: NamedApiResource { name: language, .. },
                 version:
                     Some(NamedApiResource {
-                        name: Some(version_id),
-                        ..
+                        name: version_id, ..
                     }),
             } = flavor_text_entry
             {
@@ -70,28 +63,21 @@ impl Builder<String> for Descriptions {
                 let version = rustemon::games::version::get_by_name(&version_id, rc).await?;
                 let version_name = version
                     .names
-                    .unwrap_or_default()
                     .find_by_lang(lang)
                     .with_context(|| format!("No version name in {} for {}", lang, version_id))?;
 
                 let generation = version
                     .version_group
-                    .with_context(|| format!("No version group for {}", version_id))?
                     .follow(rc)
                     .await?
                     .generation
-                    .with_context(|| format!("No generation for version {}", version_id))?
                     .follow(rc)
                     .await?;
 
-                let generation_id = generation.name.unwrap();
-                let generation_name = generation
-                    .names
-                    .unwrap_or_default()
-                    .find_by_lang(lang)
-                    .with_context(|| {
-                        format!("No generation name in {} for {}", lang, generation_id)
-                    })?;
+                let generation_id = generation.name;
+                let generation_name = generation.names.find_by_lang(lang).with_context(|| {
+                    format!("No generation name in {} for {}", lang, generation_id)
+                })?;
 
                 descriptions
                     .generation_id_to_names

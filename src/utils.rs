@@ -22,11 +22,9 @@ pub(crate) async fn get_abilities_names_by_lang(
     for ability in abilities {
         let ability_name = ability
             .ability
-            .unwrap()
             .follow(rc)
             .await?
             .names
-            .unwrap_or_default()
             .find_by_lang(lang)
             .unwrap();
         result.push(ability_name);
@@ -47,7 +45,6 @@ pub(crate) async fn get_egg_groups_names_by_lang(
             .follow(rc)
             .await?
             .names
-            .unwrap_or_default()
             .find_by_lang(lang)
             .with_context(|| format!("No {} for {:?}", lang, egg_group))?;
         result.push(egg_group_name);
@@ -64,19 +61,15 @@ pub(crate) async fn get_effort_points_map_by_lang(
     let mut result = HashMap::new();
 
     for pokemon_stat in pokemon_stats {
-        let effort_points = pokemon_stat.effort.unwrap_or_default();
-        if effort_points > 0 {
+        if pokemon_stat.effort > 0 {
             let stat_name = pokemon_stat
                 .stat
-                .as_ref()
-                .with_context(|| format!("No stat for {:?}", pokemon_stat))?
                 .follow(rc)
                 .await?
                 .names
-                .unwrap_or_default()
                 .find_by_lang(lang)
                 .with_context(|| format!("No name in {} for {:?}", lang, pokemon_stat))?;
-            result.insert(stat_name, effort_points);
+            result.insert(stat_name, pokemon_stat.effort);
         }
     }
 

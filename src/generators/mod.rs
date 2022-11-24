@@ -48,10 +48,7 @@ pub(crate) async fn generate(base_path: PathBuf, context: &Context<'_>) -> Resul
 }
 
 async fn generate_pokemon_list(rc: &RustemonClient) -> Result<Vec<String>> {
-    let nb_pokemon = rustemon::pokemon::pokemon::get_page(rc)
-        .await?
-        .count
-        .unwrap_or_default();
+    let nb_pokemon = rustemon::pokemon::pokemon::get_page(rc).await?.count;
 
     let mut pokemon_names = Vec::with_capacity(nb_pokemon as usize);
 
@@ -59,9 +56,9 @@ async fn generate_pokemon_list(rc: &RustemonClient) -> Result<Vec<String>> {
     while offset < nb_pokemon {
         let page = rustemon::pokemon::pokemon::get_page_with_param(offset, 100, rc).await?;
 
-        for p in page.results.unwrap_or_default().into_iter() {
-            if p.follow(rc).await?.is_default.unwrap() {
-                pokemon_names.push(p.name.unwrap());
+        for p in page.results.into_iter() {
+            if p.follow(rc).await?.is_default {
+                pokemon_names.push(p.name);
             }
         }
         offset += 100;

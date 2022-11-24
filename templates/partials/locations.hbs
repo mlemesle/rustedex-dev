@@ -1,0 +1,14 @@
+<ul>
+	{{#each locations_by_version}}
+		<li>
+		{{@key}}
+			<ul>
+			{{#each this}}
+				<li>
+					{{this}}
+				</li>
+			{{/each}}
+			</ul>
+		</li>
+	{{/each}}
+</ul>

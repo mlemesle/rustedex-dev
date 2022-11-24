@@ -29,42 +29,27 @@ impl Builder<Vec<(String, PathBuf)>> for AllPokemon {
         for (pokemon_id, path) in data {
             let pokemon = rustemon::pokemon::pokemon::get_by_name(pokemon_id, rc).await?;
 
-            let pokemon_species = pokemon
-                .species
-                .with_context(|| format!("No species for {}", pokemon_id))?
-                .follow(rc)
-                .await?;
+            let pokemon_species = pokemon.species.follow(rc).await?;
 
             let pokemon_index = pokemon_species
                 .pokedex_numbers
-                .unwrap_or_default()
                 .iter()
-                .find(|pokemon_number| {
-                    pokemon_number
-                        .pokedex
-                        .as_ref()
-                        .unwrap()
-                        .name
-                        .as_ref()
-                        .unwrap()
-                        == "national"
-                })
-                .map(|pokemon_number| pokemon_number.entry_number.unwrap())
+                .find(|pokemon_number| pokemon_number.pokedex.name == "national")
+                .map(|pokemon_number| pokemon_number.entry_number)
                 .unwrap_or(9999);
 
-            let names = pokemon_species.names.unwrap_or_default();
+            let names = pokemon_species.names;
             let display_name = names
                 .find_by_lang(lang)
                 .with_context(|| format!("No {} name for {}", lang, pokemon_id))?;
 
             let pokemon_sprite = pokemon
                 .sprites
-                .with_context(|| format!("No sprites for {}", pokemon_id))?
                 .front_default
                 .unwrap_or_else(|| {
                     format!(
                         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{}.png",
-                        pokemon.id.unwrap()
+                        pokemon.id
                     )
                 });
 

@@ -5,6 +5,7 @@ use rustemon::client::RustemonClient;
 pub(crate) mod all_pokemon;
 pub(crate) mod card;
 pub(crate) mod descriptions;
+pub(crate) mod locations;
 pub(crate) mod moves;
 pub(crate) mod pokemon;
 pub(crate) mod search;
